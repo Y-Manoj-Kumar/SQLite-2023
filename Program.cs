@@ -6,7 +6,7 @@ class Program
 {
     static void Main()
     {
-        var HT = new HabitTracker();
+        var HT = new HTracker();
         HT.Start();
     }
 }
