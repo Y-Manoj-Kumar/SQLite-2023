@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// using System;
+// using System.Collections.Generic;
 using System.Globalization;
-using Microsoft.Data.Sqlite;
+using Microsoft.Data.Sqlite; 
 
 //Youtube tutorial: https://www.youtube.com/watch?v=d1JIJdDVFjs
 
 class HabitTracker
-{
+{   
     private string _connectionString = @"Data Source=habit-Tracker.sqlite";
     public void Start()
     {
@@ -60,7 +60,7 @@ class HabitTracker
                     GetAllRecords();
                     break;
                 case "2":
-                    Insert();
+                    Insert(); 
                     break;
                 case "3":
                     Delete();
@@ -94,13 +94,15 @@ class HabitTracker
             {
                 while (reader.Read())
                 {
-                    tableData.Add(
-                    new DrinkingWater
-                    {
-                        Id = reader.GetInt32(0),
-                        Date = DateTime.ParseExact(reader.GetString(1), "dd-MM-yy", new CultureInfo("en-US")),
-                        Quantity = reader.GetInt32(2)
-                    }); ;
+                    // tableData.Add(
+                    // new DrinkingWater
+                    // {
+                    //     Id = reader.GetInt32(0),
+                    //     Date = DateTime.ParseExact(reader.GetString(1), "dd-MM-yy", new CultureInfo("en-US")),
+                    //     Quantity = reader.GetInt32(2),
+                        
+                    // }); 
+                    Console.WriteLine(reader.GetInt32(0));
                 }
             }
             else
