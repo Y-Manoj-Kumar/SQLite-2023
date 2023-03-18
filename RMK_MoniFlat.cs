@@ -6,6 +6,7 @@ class RMK_MoniFlat
 
     private string connectionString = @"Data Source = RMK_MoniFlat.sqlite";
 
+    #region  Start
     public void Start()
     {
         var connection = new SqliteConnection(connectionString);
@@ -26,7 +27,9 @@ class RMK_MoniFlat
 
         GetUserInput();
     } 
+    #endregion
 
+    #region  GetUserInput
     private void GetUserInput()
     {
         Console.Clear();
@@ -77,8 +80,9 @@ class RMK_MoniFlat
 
         }
     }
+    #endregion
 
-
+    #region  GetAllRecords
     private void GetAllRecords()
     {
         Console.Clear();
@@ -87,7 +91,7 @@ class RMK_MoniFlat
         connection.Open();
         var sqlCmd =connection.CreateCommand();
         sqlCmd.CommandText = 
-        @"SELECT * FROM RMK_MoniFlat";
+        @"SELECT * FROM Moni_Flat_Members";
 
         List<FlatMembers> tabledata = new();
         SqliteDataReader reader = sqlCmd.ExecuteReader();
@@ -99,16 +103,12 @@ class RMK_MoniFlat
                 tabledata.Add(
                 new FlatMembers
                 {
-                    // Id = reader.GetInt32(0);
-                    // Name = reader.GetString(1);
-                    // Age = reader.GetInt32(2);
-                    // Address =reader.GetString(3);
-                    // Mobile_Number = reader.GetInt64(4);
-                    // Months_Stayed = reader.GetInt32(5);
-
-
-                    
-                 
+                    Id = reader.GetInt32(0),
+                    Name = reader.GetString(1),
+                    Age = reader.GetInt32(2),
+                    Address =reader.GetString(3),
+                    Mobile_Number = reader.GetInt64(4),
+                    Months_Stayed = reader.GetInt32(5)
                 });
             }
         }
@@ -116,8 +116,22 @@ class RMK_MoniFlat
         {
             Console.WriteLine("No Rows Found.");
         }
-    }
 
+        connection.Close();
+        
+
+        Console.WriteLine("..............................\n");
+
+        foreach (var item in tabledata)
+        {
+            Console.WriteLine($"{item.Id} \nName: {item.Name} \nAge: {item.Age} \nAddress: {item.Address} \nMobile_Number: {item.Mobile_Number} \nMonths_Stayed: {item.Months_Stayed}");
+        }
+
+        Console.WriteLine("..............................\n");
+    }
+    #endregion
+    
+    #region Insert
     private void Insert()
     {
          string Name = GetNameInput();
@@ -136,17 +150,72 @@ class RMK_MoniFlat
         sqlCmd.ExecuteNonQuery();
         connection.Close();
     }
+    #endregion
 
+    #region Update
     private void Update()
     {
-        Console.WriteLine("Im From Upadte");
-    }
+        GetAllRecords();
 
+        var recordId = GetNumberInput("\n\nPlease type Id of the record would like to update. Type 0 to return to main manu.\n\n");
+
+        var connection = new SqliteConnection(connectionString);
+        
+            connection.Open();
+
+            var checkCmd = connection.CreateCommand();
+            checkCmd.CommandText = $"SELECT EXISTS(SELECT 1 FROM Moni_Flat_Members WHERE Id = {recordId})";
+            int checkQuery = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+            if (checkQuery == 0)
+            {
+                Console.WriteLine($"\n\nRecord with Id {recordId} doesn't exist.\n\n");
+                connection.Close();
+                Update();
+            }
+
+         string Name = GetNameInput();
+         int Age = GetAgeInput();
+         string Address = GetAddressInput();
+         long Mobile_Number = GetMobileNumber();
+         int Months_Stayed = GetMonthsStayed();
+
+         var sqlCmd = connection.CreateCommand();
+         sqlCmd.CommandText = $"UPDATE Moni_Flat_Members SET Name = '{Name}', Age = {Age}, Address '{Address}', Mobile_Number = '{Mobile_Number}', Months_Stayed = '{Months_Stayed} WHERE Id = {recordId}";
+
+         sqlCmd.ExecuteNonQuery();
+
+         connection.Close();
+    
+    }
+    #endregion
+
+    #region Delete
     private void Delete()
     {
-        Console.WriteLine("Im From Delete");
-    }
+        Console.Clear();
+        GetAllRecords();
 
+        var recordId = GetNumberInput("Enter the Id you want to delete.");
+        var connection = new SqliteConnection(connectionString);
+
+        connection.Open();
+        var sqlCmd = connection.CreateCommand();
+        sqlCmd.CommandText =
+        $"DELETE FROM Moni_Flat_Members WHERE Id='{recordId}'";
+
+        int rowCount = sqlCmd.ExecuteNonQuery();
+        if (rowCount == 0)
+        {
+            Console.WriteLine($"Entered recordId which is '{recordId}' is not found");
+        }
+
+        Console.WriteLine($"The Id which is '{recordId}' is deleted successfully.");
+        
+    }
+    #endregion
+
+    #region GetNameInput
     string GetNameInput()
     {
         Console.WriteLine("Enter your Full Name.");
@@ -156,7 +225,9 @@ class RMK_MoniFlat
 
         return enteredName;
     }
+    #endregion
 
+    #region GetAgeInput
     int GetAgeInput()
     {
         Console.WriteLine("\nEnter your Age.");
@@ -168,7 +239,9 @@ class RMK_MoniFlat
 
         return age;
     }
+    #endregion
 
+    #region GetAddressInput
     string GetAddressInput()
     {
         Console.WriteLine("\nEnter Your Address.");
@@ -178,7 +251,9 @@ class RMK_MoniFlat
 
         return enteredAddress;
     }
+    #endregion
 
+    #region  GetMobileNumber
     long GetMobileNumber()
     {
         Console.WriteLine("\nEnter your MobileNumber.");
@@ -190,7 +265,9 @@ class RMK_MoniFlat
 
         return Mobile_Number;
     }
+    #endregion
 
+    #region  GetMonthsStayed
     int GetMonthsStayed()
     {
         Console.WriteLine("\nEnter how many MonthsStayed.");
@@ -201,10 +278,23 @@ class RMK_MoniFlat
         int Months_Stayed = Convert.ToInt32(enteredMonthsStayed);
 
         return Months_Stayed;
-        
     }
+    #endregion
 
+    #region GetNumberInput
+    int GetNumberInput(string message)
+    {
+      Console.WriteLine(message);
 
+      string numberInput = Console.ReadLine();
+      if (numberInput == "0") GetUserInput();
+
+      int finalInput = Convert.ToInt32(numberInput);
+      return finalInput ;
+    }
+    #endregion
+
+    #region FlatMembers
     public class FlatMembers
     {
         public int Id { get; set; }
@@ -214,6 +304,6 @@ class RMK_MoniFlat
         public long Mobile_Number { get; set; }
         public int Months_Stayed { get; set; }
     }
+    #endregion
 
-    
 }

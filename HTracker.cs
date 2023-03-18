@@ -8,7 +8,7 @@ class HTracker
 
     public void Start()
     {
-      var connection = new SqliteConnection(_connectionString); // Data Source path
+      var connection = new SqliteConnection(_connectionString); 
       connection.Open();
       var sqlcmd = connection.CreateCommand();
       sqlcmd.CommandText = @"CREATE TABLE IF NOT EXISTS keeping_hydrated(
@@ -204,7 +204,7 @@ class HTracker
 
 
     #region properties
-  
+
     public class DrinkingWater
     {
         public int Id { get; set; }

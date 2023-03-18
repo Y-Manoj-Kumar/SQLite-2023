@@ -6,7 +6,11 @@ class Program
 {
     static void Main()
     {
-        var moniflat = new RMK_MoniFlat();
-        moniflat.Start();
+        // var moniflat = new RMK_MoniFlat();
+        // moniflat.Start();
+
+        var HT = new HabitTracker();
+        HT.Start();
+
     }
 }
