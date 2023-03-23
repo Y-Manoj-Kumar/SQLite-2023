@@ -9,8 +9,10 @@ class Program
         // var moniflat = new RMK_MoniFlat();
         // moniflat.Start();
 
-        var HT = new HabitTracker();
-        HT.Start();
+        // var HT = new HabitTracker();
+        // HT.Start();
 
+        var SM = new SuperMarket();
+        SM.Start();
     }
 }

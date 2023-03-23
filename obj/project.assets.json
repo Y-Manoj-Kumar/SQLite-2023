@@ -338,11 +338,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/manoj/Documents/GitHub/SQLite/SQLite.csproj",
+      "projectUniqueName": "/Users/manoj/Documents/GitHub/SQLite-Learn/SQLite.csproj",
       "projectName": "SQLite",
-      "projectPath": "/Users/manoj/Documents/GitHub/SQLite/SQLite.csproj",
+      "projectPath": "/Users/manoj/Documents/GitHub/SQLite-Learn/SQLite.csproj",
       "packagesPath": "/Users/manoj/.nuget/packages/",
-      "outputPath": "/Users/manoj/Documents/GitHub/SQLite/obj/",
+      "outputPath": "/Users/manoj/Documents/GitHub/SQLite-Learn/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/manoj/.nuget/NuGet/NuGet.Config"

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "sdtRTTudZUboJX0EFLD+43nLgRj5XDTOaKX63a+zNXPLSLUqJPgmvfzjZBAgnxemkQBxGHDrotgCqjgLmTr96g==",
+  "dgSpecHash": "cbcvEouByL+xMN2MLOI2Ch02UxtRSjknskGsk2k63YExvKORZmR4KpSs0tZgtJeADrgLOTyzrGhlRkuX+1Rq/g==",
   "success": true,
-  "projectFilePath": "/Users/manoj/Documents/GitHub/SQLite/SQLite.csproj",
+  "projectFilePath": "/Users/manoj/Documents/GitHub/SQLite-Learn/SQLite.csproj",
   "expectedPackageFiles": [
     "/Users/manoj/.nuget/packages/microsoft.data.sqlite/7.0.3/microsoft.data.sqlite.7.0.3.nupkg.sha512",
     "/Users/manoj/.nuget/packages/microsoft.data.sqlite.core/7.0.3/microsoft.data.sqlite.core.7.0.3.nupkg.sha512",
