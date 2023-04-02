@@ -51,7 +51,7 @@ class RMK_MoniFlat
           {
             case "0":
             closeApp = true;
-                        Console.WriteLine("\nHave a Great Day\n");
+            Console.WriteLine("\nHave a Great Day\n");
             Environment.Exit(0);
 
             break;
