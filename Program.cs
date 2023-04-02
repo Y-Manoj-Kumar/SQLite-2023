@@ -13,6 +13,9 @@ class Program
         // HT.Start();
 
         var SM = new SuperMarket();
-        SM.Start();
+        SM.InventoryList();
+
+        var bill= new Billing();
+        bill.print_bill();
     }
 }

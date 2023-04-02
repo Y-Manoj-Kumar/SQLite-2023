@@ -114,7 +114,7 @@ class RMK_MoniFlat
         }
         else
         {
-            Console.WriteLine("No Rows Found.");
+            Console.WriteLine("No Rows Found.\n");
         }
 
         connection.Close();

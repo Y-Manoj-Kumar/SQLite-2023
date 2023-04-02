@@ -1,7 +1,7 @@
 using System.Globalization;
 using Microsoft.Data.Sqlite;
 
-class SuperMarket
+public class SuperMarket
 {
     private string connectionString = @"Data Source = Inventory.sqlite";
 
@@ -81,7 +81,7 @@ class SuperMarket
 
     #region InventoryList
 
-    private void InventoryList()
+    public void InventoryList()
     {
 
         Console.Clear();
