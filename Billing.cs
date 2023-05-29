@@ -4,7 +4,19 @@ using System.Linq;
 
 class Billing
 {
-    int price = 0;
+    int sum = 0;
+    int price;
+
+    // struct ProductStruct
+    // {
+    //     public int ProductId;
+    //     public string ProductName;
+    //     public float ProductPrice;
+
+    // }
+
+
+
     public void print_bill()
     {
  
@@ -60,8 +72,8 @@ class Billing
                 break;
 
                 case "1":
-                // check_out();
-                Console.WriteLine("\nIm from checkout");
+                calculate_bill();
+                // Console.WriteLine("\nIm from checkout");
                 break;
 
                 case "2":
@@ -74,10 +86,20 @@ class Billing
     }
 
 
-    public void check_out()
+    public void calculate_bill()
     {
-        
+
+        while (price > 0)
+        {
+            sum = sum+price;
+        }
+        Console.WriteLine("\nTotal Bill: "+sum);
+
     }
+
+
+    
+
 
 
 }
