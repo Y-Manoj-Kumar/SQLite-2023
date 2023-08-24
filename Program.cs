@@ -14,8 +14,8 @@ class Program
 
 
         var SM = new SuperMarket();
-        SM.InventoryList();
-        SM.print_bill();
+        SM.Start();
+        // SM.print_bill();
 
 
 

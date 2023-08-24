@@ -174,14 +174,14 @@ class RMK_MoniFlat
                 Update();
             }
 
-         string Name = GetNameInput();
+         string name = GetNameInput();
          int Age = GetAgeInput();
          string Address = GetAddressInput();
          long Mobile_Number = GetMobileNumber();
          int Months_Stayed = GetMonthsStayed();
 
          var sqlCmd = connection.CreateCommand();
-         sqlCmd.CommandText = $"UPDATE Moni_Flat_Members SET Name = '{Name}', Age = {Age}, Address '{Address}', Mobile_Number = '{Mobile_Number}', Months_Stayed = '{Months_Stayed} WHERE Id = {recordId}";
+         sqlCmd.CommandText = $"UPDATE Moni_Flat_Members SET Name = '{name}', Age = {Age}, Address '{Address}', Mobile_Number = '{Mobile_Number}', Months_Stayed = '{Months_Stayed} WHERE Id = {recordId}";
 
          sqlCmd.ExecuteNonQuery();
 
