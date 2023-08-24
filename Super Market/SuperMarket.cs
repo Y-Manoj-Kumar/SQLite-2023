@@ -4,7 +4,7 @@ using Microsoft.Data.Sqlite;
 public class SuperMarket
 {
     private string connectionString = @"Data Source = Inventory.sqlite";
-
+    private string tableName = "Warehouse";
     #region  Start
     public void Start()
     {
@@ -13,10 +13,11 @@ public class SuperMarket
         connection.Open();
         var sqlCmd = connection.CreateCommand();
         sqlCmd.CommandText =
-        @"CREATE TABLE IF NOT EXISTS Inventory(
+        @"CREATE TABLE IF NOT EXISTS "+ tableName +@" (
         Product_Id INTEGER PRIMARY KEY AUTOINCREMENT,
         Product_Name TEXT,
-        Product_Price INTEGER
+        Product_Price INTEGER,
+        In_Stock INTEGER
         )";
                     
         sqlCmd.ExecuteNonQuery();
@@ -95,7 +96,7 @@ public class SuperMarket
         connection.Open();
         var sqlCmd = connection.CreateCommand();
         sqlCmd.CommandText =
-        @"SELECT * FROM Inventory";
+        $"SELECT * FROM {tableName} ";
 
         List<ProductDetails> tabledata = new();
         SqliteDataReader reader = sqlCmd.ExecuteReader();
@@ -110,7 +111,8 @@ public class SuperMarket
                     {
                         product_id = reader.GetInt32(0),
                         product_name = reader.GetString(1),
-                        product_price = reader.GetInt32(2)
+                        product_price = reader.GetInt32(2),
+                        product_instock = reader.GetInt32(3)
                         
                     }
                 );
@@ -124,11 +126,11 @@ public class SuperMarket
 
         Console.WriteLine("........INVENTORY LIST.........\n");
 
-        Console.WriteLine("product_Id   product_Name    product_price");
-        Console.WriteLine("\n");
+        Console.WriteLine("product_Id\tproduct_Name\tproduct_price\tIn_Stock");
+        Console.WriteLine("....................................................");
         foreach (var item in tabledata)
         {
-            Console.WriteLine($"{item.product_id}            {item.product_name}        {item.product_price}");
+            Console.WriteLine($"{item.product_id}\t\t{item.product_name}\t\t{item.product_price}\t\t{item.product_instock}");        
         }
 
     }
@@ -142,13 +144,14 @@ public class SuperMarket
         int product_id = GetProductIdInput();
         string product_name = GetProductNameInput();
         int product_price = GetProductPriceInput();
+        int product_instock = GetProductInStock();
 
         var connection = new SqliteConnection(connectionString);
         connection.Open();
 
         var sqlCmd = connection.CreateCommand();
         sqlCmd.CommandText =
-        $"INSERT INTO Inventory (product_id,product_name,product_price) VALUES('{product_id}','{product_name}','{product_price}')";
+        $"INSERT INTO {tableName} (product_id,product_name,product_price,in_stock) VALUES('{product_id}','{product_name}','{product_price}','{product_instock}')";
 
         sqlCmd.ExecuteNonQuery();
         connection.Close();
@@ -157,6 +160,7 @@ public class SuperMarket
 
 
     #region Delete
+
 
     private void Delete()
     {
@@ -169,7 +173,7 @@ public class SuperMarket
         connection.Open();
         var sqlCmd = connection.CreateCommand();
         sqlCmd.CommandText = 
-        $"DELETE FROM Inventory WHERE Product_Id='{productid}'";
+        $"DELETE FROM {tableName} WHERE Product_Id='{productid}'";
 
         int rowCount = sqlCmd.ExecuteNonQuery();
         if (rowCount == 0)
@@ -196,7 +200,7 @@ public class SuperMarket
             connection.Open();
 
             var checkCmd = connection.CreateCommand();
-            checkCmd.CommandText = $"SELECT EXISTS(SELECT 1 FROM Inventory WHERE Id ={recordId})";
+            checkCmd.CommandText = $"SELECT EXISTS(SELECT 1 FROM {tableName} WHERE Id ={recordId})";
             int checkQuery = Convert.ToInt32(checkCmd.ExecuteScalar());
 
             if (checkQuery == 0)
@@ -209,9 +213,10 @@ public class SuperMarket
              int  product_id = GetProductIdInput();
              string product_name = GetProductNameInput();
              int product_price = GetProductPriceInput();
+             int product_instock = GetProductInStock();
 
              var sqlcmd = connection.CreateCommand();
-             sqlcmd.CommandText = $"UPDATE Inventory SET productId ='{product_id}', productName = '{product_name}', productPrice ='{product_price}' ";
+             sqlcmd.CommandText = $"UPDATE {tableName} SET Product_Id ='{product_id}', Product_Name = '{product_name}', Product_Price ='{product_price}',In_Stock='{product_instock}'     ";
 
              sqlcmd.ExecuteNonQuery();
 
@@ -237,6 +242,26 @@ public class SuperMarket
 
         return Id;
     }
+    #endregion
+
+
+    #region GetProductInStock
+
+
+    int GetProductInStock()
+    {
+        Console.WriteLine("\nEnter present stock of Product.");
+        string productinstock = Console.ReadLine();
+
+        if (productinstock == "0")
+       
+            GetUserInput();
+       
+        int instock = Convert.ToInt32(productinstock);
+
+        return instock;
+    }
+
     #endregion
 
 
@@ -294,112 +319,19 @@ public class SuperMarket
         public int product_id { get; set; }
         public string product_name { get; set; }
         public int product_price { get; set; }
+        public int product_instock {get; set;}
     }
     #endregion
 
 
-//                                      .........................BILLING SECTION...........................
+//                   .........................BILLING SECTION.............................
 
-    // int sum = 0;
-    // int price;
+    int sum = 0; // Initialize the total bill sum
+    private object tablename;
+    private object p_name;
+    int p_price;
+    List<string> purchasedItems = new List<string>();
 
-    // struct ProductStruct
-    // {
-    //     public int ProductId;
-    //     public string ProductName;
-    //     public float ProductPrice;
-
-    // }
-
-
-
-    // public void print_bill()
-    // {
- 
-    //     bool closeApp =false;
-    //     while (closeApp == false)
-    //     {
-    //         Console.WriteLine("\nEnter 0 to buy products. ");
-    //         Console.WriteLine("Enter 1 to checkout.");
-    //         Console.WriteLine("Enter 2 to Exit.\n");
-
-    //         string userInput = Console.ReadLine();
-
-    //         switch (userInput)
-    //         {
-    //             case "0":
-    //             Console.WriteLine("\nEnter product_Id from above Inventory List to buy.");
-    //             string Id =  Console.ReadLine();
-    //             int entered_id = Convert.ToInt32(Id);
-
-    //             Console.WriteLine("\nEnter quantity of product respectively.");
-    //             string quantity = Console.ReadLine();
-    //             int entered_quantity = Convert.ToInt32(quantity);
-                
-    //             if (entered_id == 11)
-    //             {
-    //                 int price = (entered_quantity*20);
-    //                 Console.WriteLine("Price of kitkat is: " +price);
-    //             }    
-    //             else if(entered_id == 12)
-    //             {
-    //                 int price = (entered_quantity*30);
-    //                 Console.WriteLine("Price of HideandSeek is: " +price);
-    //             }
-    //             else if(entered_id == 13)
-    //             {
-    //                 int price = (entered_quantity*50);
-    //                 Console.WriteLine("Price of Colgate Active Salt is: " +price);
-    //             }
-    //             else if(entered_id == 14)
-    //             {
-    //                 int price = (entered_quantity*30);
-    //                 Console.WriteLine("Price of Id 14 is: " +price);
-    //             }
-    //             else 
-    //             {
-    //                 Console.WriteLine("Enter Valid Product Id");
-    //             }
-
-    //             if (price != -1)
-    //             {
-    //                 sum += price; // Add the price to the total sum
-    //                 Console.WriteLine($"Price of product is: {sum}");
-    //             }
-    //             break;
-
-    //             case "1":
-    //             // calculate_bill();
-    //             Console.WriteLine("Total Bill " + sum);
-    //             break;
-
-    //             case "2":
-    //             closeApp = true;
-    //             Console.WriteLine("HAVE A GREAT DAY :)");
-    //             Environment.Exit(2);
-    //             break;   
-    //         }
-    //     }
-    // }
-
-
-    // public void calculate_bill()
-    // {
-
-    //     while (price > 0)
-    //     {
-    //         sum = sum+price;
-    //     }
-    //     Console.WriteLine("\nTotal Bill: " + sum);
-
-    // }
-
-
-
-
-
-int sum = 0; // Initialize the total bill sum
-    
     public void print_bill()
     {
         bool closeApp = false;
@@ -414,6 +346,7 @@ int sum = 0; // Initialize the total bill sum
             switch (userInput)
             {
                 case "0":
+                    InventoryList();
                     Console.WriteLine("\nEnter product_Id from above Inventory List to buy.");
                     string id = Console.ReadLine();
                     int enteredId = Convert.ToInt32(id);
@@ -425,15 +358,24 @@ int sum = 0; // Initialize the total bill sum
                     int price = CalculatePrice(enteredId, enteredQuantity);
                     if (price != -1)
                     {
-                        Console.WriteLine($"Price of product is: {price}");
-                        sum += price; // Add the price to the total sum
+
+                        string purchasedItem = $"{p_name} - {p_price} x {enteredQuantity} = {price}";
+                        purchasedItems.Add(purchasedItem);
+
+                        Console.WriteLine($"\nPrice of {p_name} {p_price}*{quantity} : {price}");
+                        sum = sum+price;
                     }
                     break;
 
                 case "1":
-                    // CalculateBill();  
-                    Console.WriteLine("Total Bill: " + sum);
+                    Console.WriteLine("\nItems Purchased:");
+                    foreach (string item in purchasedItems)
+                    {
+                        Console.WriteLine(item);
+                    }
+                    Console.WriteLine("Total Bill : " + sum);
                     break;
+                    
 
                 case "2":
                     closeApp = true;
@@ -446,23 +388,35 @@ int sum = 0; // Initialize the total bill sum
     int CalculatePrice(int productId, int quantity)
     {
         int price = -1; // Default value for invalid product IDs
+        
 
         switch (productId)
         {
             case 11 :
-                price = quantity * 10;
+                p_name="KitKat";
+                p_price=20;
+                price = quantity * p_price;
+                // Console.WriteLine($"Price of Kitkat :  {price} * {quantity} = {sum} " );
                 break;
             case 12:
-                price = quantity * 12;
+                p_name="DairyMilk";
+                p_price=45;
+                price = quantity * p_price;
                 break;
             case 13:
-                price = quantity * 20;
+                p_name="MilkyBar";
+                p_price=30;
+                price = quantity * p_price;
                 break;
             case 14:
-                price = quantity * 30;
+                p_name="Snikers";
+                p_price=20;
+                price = quantity * p_price;
                 break;
             case 15:
-                price = quantity * 50;
+                p_name="Toblerance";
+                p_price=80;
+                price = quantity * p_price;
                 break;
             default:
                 Console.WriteLine("Enter Valid Product Id");
@@ -471,6 +425,9 @@ int sum = 0; // Initialize the total bill sum
 
         return price;
     }
+
+
+
 
 
 }
