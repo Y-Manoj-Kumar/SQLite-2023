@@ -328,9 +328,12 @@ public class SuperMarket
 
     int sum = 0; // Initialize the total bill sum
     private object tablename;
-    private object p_name;
+    private string p_name;
     int p_price;
     List<string> purchasedItems = new List<string>();
+
+    DateTime currentDateTime = DateTime.Now;
+
 
     public void print_bill()
     {
@@ -359,21 +362,34 @@ public class SuperMarket
                     if (price != -1)
                     {
 
-                        string purchasedItem = $"{p_name} - {p_price} x {enteredQuantity} = {price}";
+                        string purchasedItem = $"{enteredQuantity} x {p_name}        ₹{price}";
                         purchasedItems.Add(purchasedItem);
 
-                        Console.WriteLine($"\nPrice of {p_name} {p_price}*{quantity} : {price}");
+                        Console.WriteLine($"\nPrice of {p_name} {p_price}*{quantity} : ₹{price}");
                         sum = sum+price;
                     }
                     break;
 
                 case "1":
-                    Console.WriteLine("\nItems Purchased:");
+                    Console.WriteLine("Payment thorough cash or card");
+                    string pay_mode = Console.ReadLine();
+                    Console.WriteLine("\n\n**********************************");
+                    Console.WriteLine("              RECEIPT          ");
+                    Console.WriteLine("**********************************");
+                    Console.WriteLine("SandyStores    " + currentDateTime +"\n");
                     foreach (string item in purchasedItems)
                     {
                         Console.WriteLine(item);
                     }
-                    Console.WriteLine("Total Bill : " + sum);
+                    Console.WriteLine("----------------------------------");
+                    Console.WriteLine("Total Bill   : " +"₹"+sum);
+                    Console.WriteLine("Payment done :"+pay_mode);
+                    Console.WriteLine("----------------------------------");
+                    Console.WriteLine(" \n        THANK YOU!               ");
+
+                    Console.WriteLine("VISIT AGAIN HAVE A GREAT DAY     ");
+
+                    Console.WriteLine("**********************************");
                     break;
                     
 
@@ -385,43 +401,55 @@ public class SuperMarket
         }
     }
 
-    int CalculatePrice(int productId, int quantity)
+    int CalculatePrice(int enteredId, int quantity)
     {
         int price = -1; // Default value for invalid product IDs
         
 
-        switch (productId)
+        switch (enteredId)
         {
-            case 11 :
-                p_name="KitKat";
-                p_price=20;
+            case 109264 :
+                p_name="KisanJam";
+                p_price=39;
                 price = quantity * p_price;
                 // Console.WriteLine($"Price of Kitkat :  {price} * {quantity} = {sum} " );
                 break;
-            case 12:
-                p_name="DairyMilk";
-                p_price=45;
-                price = quantity * p_price;
-                break;
-            case 13:
-                p_name="MilkyBar";
+            case 435631:
+                p_name="GoodDay";
                 p_price=30;
                 price = quantity * p_price;
                 break;
-            case 14:
+            case 836153:
                 p_name="Snikers";
-                p_price=20;
+                p_price=70;
                 price = quantity * p_price;
                 break;
-            case 15:
-                p_name="Toblerance";
-                p_price=80;
+            case 863416:
+                p_name="KitKat";
+                p_price=30;
+                price = quantity * p_price;
+                break;
+            case 887542:
+                p_name="MilkBread";
+                p_price=45;
+                price = quantity * p_price;
+                break;
+            case 998125:
+                p_name="BadamMilk";
+                p_price=60;
                 price = quantity * p_price;
                 break;
             default:
                 Console.WriteLine("Enter Valid Product Id");
                 break;
         }
+            const int MaxLength = 6;
+
+             var name = p_name;
+             if (name.Length > MaxLength)
+               name = name.Substring(0, MaxLength);
+
+             p_name = name;
 
         return price;
     }
